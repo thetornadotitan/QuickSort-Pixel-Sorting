@@ -99,18 +99,6 @@ void draw(){
     }
   }
   
-  //Update pixels with currently sorted hue values
-  if(frameCount % 60 == 0){
-    img.loadPixels();
-    for (int i = 0; i < img.pixels.length; i++) {
-      //img.pixels[i] = color(hueArray[i], 255, 255);
-      //img.pixels[i] = color(hueArray[i], saturation(img.pixels[i]), brightness(img.pixels[i])); 
-      img.pixels[i] = color(hueArray[i], 255, brightness(img.pixels[i]));
-      //img.pixels[i] = color(hueArray[i], saturation(img.pixels[i]), 255);
-    }
-    img.updatePixels();
-  }
-  
   //Draw updated image at current sort progress
   image(img, 0, 0);
   
@@ -161,4 +149,11 @@ public void swap(float[] arr, int i, int j) {
   float temp = arr[i];
   arr[i] = arr[j];
   arr[j] = temp;
+  
+  //Update pixels with currently sorted hue values
+  img.loadPixels();
+  color tempC = img.pixels[i];
+  img.pixels[i] = img.pixels[j];
+  img.pixels[j] = tempC;
+  img.updatePixels();
 }
