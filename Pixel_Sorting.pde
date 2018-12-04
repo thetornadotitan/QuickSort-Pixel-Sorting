@@ -11,17 +11,32 @@ int stepSize;
 //Needed for the version of the iterative quick sort that I used (thanks https://javarevisited.blogspot.com/2016/09/iterative-quicksort-example-in-java-without-recursion.html)
 Stack stack;
 
+//Possible Images
+String[] images;
+
 void setup(){
   //Fits on my screen
   size(1000, 1000);
   
   background(0);
   
+  textSize(32);
+  
   //Change to HSB because sorting looks nice in this mode and its easier.
   colorMode(HSB);
   
+  images = new String[3];
+  images[0] = "Colorful1.jpg";
+  images[1] = "Colorful2.jpg";
+  images[2] = "Smoke.jpg";
+  
+  reset();
+   
+}
+
+void reset(){
   //Load Image and strech / squash it too size
-  img = loadImage("Colorful1.jpg");
+  img = loadImage(images[(int) random(images.length)]);
   img.resize(width, height);
   
   //create Array
@@ -40,11 +55,12 @@ void setup(){
   stack.push(hueArray.length);
   
   //Create a step size change the divisor higher for smaller steps but quicker animation and lower for less steps but quicker sorting, within reason.
-  stepSize = width * height / 100;
+  stepSize = width;
+  
+  if(stepSize < 1) stepSize = 1;
   
   //Draw initial image
   image(img, 0, 0);
-   
 }
 
 void draw(){
@@ -60,7 +76,7 @@ void draw(){
         //Make sure that the ends have no crossed each other or are not already right next to each other.
         if(end - start >= 2){
           //pick the pivot for the partition algo
-          int p = start + ((end - start) / 2);
+          int p = (int) random((float) start, (float) end);
           //Set P the the returned value from the partition algo
           p = Part(hueArray, p, start, end);
           
@@ -77,6 +93,7 @@ void draw(){
       }else{
         //Look at the we done sorted!!
         System.out.println("DONE!");
+        reset();
         break;
       }
     }
@@ -85,12 +102,18 @@ void draw(){
   //Update pixels with currently sorted hue values
   img.loadPixels();
   for (int i = 0; i < img.pixels.length; i++) {
-    img.pixels[i] = color(hueArray[i], 255, 255); 
+    //img.pixels[i] = color(hueArray[i], 255, 255);
+    img.pixels[i] = color(hueArray[i], saturation(img.pixels[i]), brightness(img.pixels[i])); 
+    //img.pixels[i] = color(hueArray[i], 255, brightness(img.pixels[i]));
+    //img.pixels[i] = color(hueArray[i], saturation(img.pixels[i]), 255);
   }
   img.updatePixels();
   
   //Draw updated image at current sort progress
   image(img, 0, 0);
+  
+  //Show framerate
+  text(frameRate, 0, 32);
 }
 
 //Partition Algo
