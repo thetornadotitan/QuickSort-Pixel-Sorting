@@ -100,14 +100,16 @@ void draw(){
   }
   
   //Update pixels with currently sorted hue values
-  img.loadPixels();
-  for (int i = 0; i < img.pixels.length; i++) {
-    //img.pixels[i] = color(hueArray[i], 255, 255);
-    img.pixels[i] = color(hueArray[i], saturation(img.pixels[i]), brightness(img.pixels[i])); 
-    //img.pixels[i] = color(hueArray[i], 255, brightness(img.pixels[i]));
-    //img.pixels[i] = color(hueArray[i], saturation(img.pixels[i]), 255);
+  if(frameCount % 60 == 0){
+    img.loadPixels();
+    for (int i = 0; i < img.pixels.length; i++) {
+      //img.pixels[i] = color(hueArray[i], 255, 255);
+      //img.pixels[i] = color(hueArray[i], saturation(img.pixels[i]), brightness(img.pixels[i])); 
+      img.pixels[i] = color(hueArray[i], 255, brightness(img.pixels[i]));
+      //img.pixels[i] = color(hueArray[i], saturation(img.pixels[i]), 255);
+    }
+    img.updatePixels();
   }
-  img.updatePixels();
   
   //Draw updated image at current sort progress
   image(img, 0, 0);
